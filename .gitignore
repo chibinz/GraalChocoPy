@@ -1,3 +1,6 @@
+# Dependencies
+graalvm*/
+
 # Compiled class file
 *.class
 
