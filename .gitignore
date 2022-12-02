@@ -1,6 +1,9 @@
 # Dependencies
 graalvm*/
 
+# Maven output
+target/
+
 # Compiled class file
 *.class
 
