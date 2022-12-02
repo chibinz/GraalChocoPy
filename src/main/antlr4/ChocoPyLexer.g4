@@ -73,6 +73,10 @@ IDSTRING
     : STRING
     ;
 
+COMMENT
+    : '#' (~[\r\n])* -> skip
+    ;
+
 fragment RN
     : '\r'? '\n'
     ;
