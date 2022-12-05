@@ -49,14 +49,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
     @Override
     public Object visitLitIdStr(ChocoPyParser.LitIdStrContext ctx) {
-        var val = memory.get(ctx.getText());
-
-
-        if (val == null) {
-            throw new RuntimeException("Variable " + ctx.getText() + " is not defined");
-        } else {
-            return val;
-        }
+        return ctx.getText();
     }
 
     @Override

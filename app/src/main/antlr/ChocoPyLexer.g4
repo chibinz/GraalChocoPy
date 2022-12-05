@@ -70,7 +70,7 @@ STRING
     ;
 
 IDSTRING
-    : STRING
+    : '"' IDENTIFIER '"'
     ;
 
 COMMENT
