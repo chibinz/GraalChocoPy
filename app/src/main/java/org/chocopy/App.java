@@ -13,9 +13,10 @@ import com.oracle.truffle.api.TruffleLanguage;
 public class App {
     public static void main(String[] args) throws IOException {
         var parseTree = parseFile(args[0]);
-        var parser = new ChocoPyParser(null);
+        var visitor = new ChocoPyVisitor();
 
-        printParseTree(parser, parseTree);
+        visitor.visit(parseTree);
+        printParseTree(parseTree);
     }
 
     public String getGreeting() {
@@ -31,8 +32,10 @@ public class App {
         return parser.program();
     }
 
-    private static void printParseTree(Parser parser, ParseTree tree) {
+    private static void printParseTree(ParseTree tree) {
+        var parser = new ChocoPyParser(null);
         var buf = new StringBuilder();
+
         recursive(tree, buf, 0, Arrays.asList(parser.getRuleNames()));
 
         System.out.println(buf);
