@@ -34,7 +34,7 @@ dependencies {
 }
 
 generateGrammarSource {
-    arguments += ['-package', 'org.chocopy']
+    arguments += ['-package', 'org.chocopy', '-visitor']
     outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/org/chocopy/")
 }
 
