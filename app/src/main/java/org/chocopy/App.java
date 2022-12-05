@@ -15,8 +15,8 @@ public class App {
         var parseTree = parseFile(args[0]);
         var visitor = new ChocoPyVisitor();
 
-        visitor.visit(parseTree);
         printParseTree(parseTree);
+        visitor.visit(parseTree);
     }
 
     public String getGreeting() {

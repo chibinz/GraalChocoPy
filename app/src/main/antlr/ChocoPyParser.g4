@@ -62,12 +62,12 @@ block
     ;
 
 literal
-    : NONE
-    | TRUE
-    | FALSE
-    | INTEGER
-    | IDSTRING
-    | STRING
+    : NONE              # litNone
+    | TRUE              # litTrue
+    | FALSE             # litFalse
+    | INTEGER           # litInt
+    | IDSTRING          # litIdStr
+    | STRING            # litStr
     ;
 
 expr
