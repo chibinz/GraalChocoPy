@@ -38,6 +38,8 @@
  *				- loki der quaeler June 2017
  */
 
+package org.chocopy;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Lexer;

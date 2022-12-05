@@ -1,14 +1,13 @@
-# VSCode artifacts
+# Dev artifacts
 .vscode/
+.gradle/
+build/
+target/
+gradle*/
+graalvm*/
 
 # Examples
 simplelanguage/
-
-# Dependencies
-graalvm*/
-
-# Maven output
-target/
 
 # Compiled class file
 *.class
