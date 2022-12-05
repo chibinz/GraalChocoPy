@@ -1,6 +1,7 @@
 # Dev artifacts
 .vscode/
 .gradle/
+bin/
 build/
 target/
 gradle*/
