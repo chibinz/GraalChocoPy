@@ -8,11 +8,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
     @Override
     public Object visitVar_def(ChocoPyParser.Var_defContext ctx) {
-        System.out.println(ctx.children);
-
-        var key = String[].class.cast(visit(ctx.typed_var()));
-        var id = key[0];
-        var type = key[1];
+        var id = visitTyped_var(ctx.typed_var());
         var val = visit(ctx.literal());
 
         memory.put(id, val);
@@ -23,38 +19,23 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
-    public String[] visitTyped_var(ChocoPyParser.Typed_varContext ctx) {
-        return new String[] {ctx.IDENTIFIER().getText(), ctx.type().getText()};
+    public String visitTyped_var(ChocoPyParser.Typed_varContext ctx) {
+        return ctx.IDENTIFIER().getText();
     }
 
     @Override
-    public Object visitLitNone(ChocoPyParser.LitNoneContext ctx) {
-        return NONE;
-    }
+    public Object visitLiteral(ChocoPyParser.LiteralContext ctx) {
+        var rule = ctx.lit.getType();
 
-    @Override
-    public Object visitLitTrue(ChocoPyParser.LitTrueContext ctx) {
-        return true;
-    }
-
-    @Override
-    public Object visitLitFalse(ChocoPyParser.LitFalseContext ctx) {
-        return false;
-    }
-
-    @Override
-    public Object visitLitInt(ChocoPyParser.LitIntContext ctx) {
-        return Integer.parseInt(ctx.getText());
-    }
-
-    @Override
-    public Object visitLitIdStr(ChocoPyParser.LitIdStrContext ctx) {
-        return ctx.getText();
-    }
-
-    @Override
-    public Object visitLitStr(ChocoPyParser.LitStrContext ctx) {
-        return ctx.getText();
+        return switch (rule) {
+            case ChocoPyParser.NONE -> NONE;
+            case ChocoPyParser.TRUE -> true;
+            case ChocoPyParser.FALSE -> false;
+            case ChocoPyParser.INTEGER -> Integer.parseInt(ctx.getText());
+            case ChocoPyParser.IDSTRING -> ctx.getText();
+            case ChocoPyParser.STRING -> ctx.getText();
+            default -> throw new RuntimeException("Unknown literal type");
+        };
     }
 
 

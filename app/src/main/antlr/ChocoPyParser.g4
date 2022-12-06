@@ -66,12 +66,12 @@ block
     ;
 
 literal
-    : NONE              # litNone
-    | TRUE              # litTrue
-    | FALSE             # litFalse
-    | INTEGER           # litInt
-    | IDSTRING          # litIdStr
-    | STRING            # litStr
+    : lit = NONE
+    | lit = TRUE
+    | lit = FALSE
+    | lit = INTEGER
+    | lit = IDSTRING
+    | lit = STRING
     ;
 
 expr
