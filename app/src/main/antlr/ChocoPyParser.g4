@@ -32,7 +32,7 @@ typed_var
     ;
 
 type
-    : IDENTIFIER | IDSTRING | OPEN_BRACKET type CLOSE_BRACKET
+    : IDENTIFIER | IDSTRING | type OPEN_BRACKET type CLOSE_BRACKET
     ;
 
 // global_decl
@@ -55,10 +55,10 @@ stmt
     ;
 
 simple_stmt
-    : PASS
-    | expr
-    | RETURN (expr)?
-    | (target ASSIGN)+ expr
+    : PASS                                  # passStmt
+    | expr                                  # exprStmt
+    | RETURN (expr)? ?                      # returnStmt
+    | (target ASSIGN)+ expr                 # assignStmt
     ;
 
 block

@@ -13,7 +13,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
         memory.put(id, val);
 
-        System.out.println(memory);
+        // System.out.println(memory);
 
         return 0;
     }
@@ -52,5 +52,18 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
             case "%" -> left % right;
             default -> throw new RuntimeException("Unknown binary operator");
         };
+    }
+
+    @Override
+    public Object visitListExpr(ChocoPyParser.ListExprContext ctx) {
+        var len = ctx.expr().size();
+        var list = new Object[len];
+
+        for (int i = 0; i < len; i++) {
+            System.out.println(ctx.expr(i).getText());
+            list[i] = visit(ctx.expr(i));
+        }
+
+        return list;
     }
 }
