@@ -82,27 +82,43 @@ expr
     ;
 
 cexpr
-    : IDENTIFIER
-    | literal
-    | OPEN_BRACKET (expr (COMMA expr)*)? CLOSE_BRACKET
+    : pexpr (comp_op pexpr)*
+    ;
+
+pexpr
+    : literal
+    | IDENTIFIER
+    | OPEN_BRACKET (expr (COMMA expr)*) CLOSE_BRACKET
     | OPEN_PAREN expr CLOSE_PAREN
-    // | cexpr DOT IDENTIFIER
-    | cexpr OPEN_BRACKET expr CLOSE_BRACKET
-    | IDENTIFIER OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN
-    // | cexpr DOT IDENTIFIER OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN
-    | cexpr bin_op cexpr
-    | MINUS cexpr
+    | pexpr member_op
+    | pexpr index_op
+    | pexpr call_op
+    | pexpr bin_op pexpr
+    | MINUS pexpr
     ;
-
-bin_op
-    : PLUS | MINUS | STAR | IDIV | MOD | EQUALS
-    | BANG_EQUAL | LESS_THAN_EQUAL | GREATER_THAN_EQUAL | LESS_THAN | GREATER_THAN
-    // | IS
-    ;
-
 
 target
     : IDENTIFIER
-    | cexpr DOT IDENTIFIER
-    | cexpr OPEN_BRACKET expr CLOSE_BRACKET
+    | pexpr member_op
+    | pexpr index_op
+    ;
+
+member_op
+    : DOT IDENTIFIER
+    ;
+
+index_op
+    : OPEN_BRACKET expr CLOSE_BRACKET
+    ;
+
+call_op
+    : OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN
+    ;
+
+bin_op
+    : PLUS | MINUS | STAR | IDIV | MOD
+    ;
+
+comp_op
+    : EQUALS | BANG_EQUAL | LESS_THAN_EQUAL | GREATER_THAN_EQUAL | LESS_THAN | GREATER_THAN // | IS
     ;

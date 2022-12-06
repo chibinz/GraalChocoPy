@@ -5,7 +5,7 @@ options { superClass=ChocoPyLexerBase; }
 // Artificial tokens only for parser purposes
 tokens { INDENT, DEDENT, LINE_BREAK }
 
-
+// Keywords
 DEF                : 'def';
 RETURN             : 'return';
 AS                 : 'as';
@@ -34,6 +34,7 @@ FALSE              : 'False';
 NONLOCAL           : 'nonlocal';
 GLOBAL             : 'global';
 
+// Operators
 PLUS                : '+';
 MINUS              : '-';
 DOT                : '.';
