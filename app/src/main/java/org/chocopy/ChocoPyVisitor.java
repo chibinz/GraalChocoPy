@@ -38,6 +38,19 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         };
     }
 
+    @Override
+    public Object visitBinExpr(ChocoPyParser.BinExprContext ctx) {
+        var left = Integer.class.cast(visit(ctx.pexpr(0)));
+        var right = Integer.class.cast(visit(ctx.pexpr(1)));
+        var op = ctx.bin_op().getText();
 
-
+        return switch (op) {
+            case "+" -> left + right;
+            case "-" -> left - right;
+            case "*" -> left * right;
+            case "//" -> left / right;
+            case "%" -> left % right;
+            default -> throw new RuntimeException("Unknown binary operator");
+        };
+    }
 }

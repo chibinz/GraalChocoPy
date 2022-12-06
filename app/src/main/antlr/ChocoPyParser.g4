@@ -86,15 +86,15 @@ cexpr
     ;
 
 pexpr
-    : literal
-    | IDENTIFIER
-    | OPEN_BRACKET (expr (COMMA expr)*) CLOSE_BRACKET
-    | OPEN_PAREN expr CLOSE_PAREN
-    | pexpr member_op
-    | pexpr index_op
-    | pexpr call_op
-    | pexpr bin_op pexpr
-    | MINUS pexpr
+    : literal                                           # litExpr
+    | IDENTIFIER                                        # idExpr
+    | OPEN_BRACKET (expr (COMMA expr)*) CLOSE_BRACKET   # listExpr
+    | OPEN_PAREN expr CLOSE_PAREN                       # parenExpr
+    | pexpr member_op                                   # memberExpr
+    | pexpr index_op                                    # indexExpr
+    | pexpr call_op                                     # callExpr
+    | pexpr bin_op pexpr                                # binExpr
+    | MINUS pexpr                                       # negExpr
     ;
 
 target
