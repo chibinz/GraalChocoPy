@@ -7,6 +7,15 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     private final static Object NONE = new Object();
 
     @Override
+    public Object visitProgram(ChocoPyParser.ProgramContext ctx) {
+        visitChildren(ctx);
+
+        System.out.println(memory);
+
+        return NONE;
+    }
+
+    @Override
     public Object visitVar_def(ChocoPyParser.Var_defContext ctx) {
         var id = visitTyped_var(ctx.typed_var());
         var val = visit(ctx.literal());
@@ -72,6 +81,24 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
         for (var id : ctx.target()) {
             memory.put(id.getText(), val);
+        }
+
+        return NONE;
+    }
+
+    @Override
+    public Object visitIfStmt(ChocoPyParser.IfStmtContext ctx) {
+        for (var i = 0; i < ctx.expr().size(); i++) {
+            var cond = Boolean.class.cast(visit(ctx.expr(i)));
+
+            if (cond) {
+                return visit(ctx.block(i));
+            }
+        }
+
+        if (ctx.ELSE() != null) {
+            var len = ctx.block().size();
+            return visit(ctx.block(len - 1));
         }
 
         return NONE;

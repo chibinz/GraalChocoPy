@@ -48,10 +48,10 @@ var_def
     ;
 
 stmt
-    : simple_stmt LINE_BREAK
-    | IF expr COLON block (ELIF expr COLON block)* (ELSE COLON block)?
-    | WHILE expr COLON block
-    | FOR IDENTIFIER IN expr COLON block
+    : simple_stmt LINE_BREAK                                           # simpleStmt
+    | IF expr COLON block (ELIF expr COLON block)* (ELSE COLON block)? # ifStmt
+    | WHILE expr COLON block                                           # whileStmt
+    | FOR IDENTIFIER IN expr COLON block                               # forStmt
     ;
 
 simple_stmt
