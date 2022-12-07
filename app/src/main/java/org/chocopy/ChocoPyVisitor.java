@@ -21,7 +21,6 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var val = visit(ctx.literal());
 
         memory.put(id, val);
-
         System.out.println(memory);
 
         return 0;
