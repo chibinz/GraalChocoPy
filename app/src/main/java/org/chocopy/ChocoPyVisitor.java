@@ -102,4 +102,14 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
         return NONE;
     }
+
+    @Override
+    public Object visitWhileStmt(ChocoPyParser.WhileStmtContext ctx) {
+        return NONE;
+    }
+
+    @Override
+    public Object visitForStmt(ChocoPyParser.ForStmtContext ctx) {
+        return NONE;
+    }
 }
