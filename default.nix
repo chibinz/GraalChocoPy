@@ -10,6 +10,10 @@ nixpkgs.mkShell {
     graalvm
   ];
   shellHook = ''
-    export JAVA_HOME=${graalvm}
+    if test $(uname) = "Darwin"; then
+      export JAVA_HOME=${graalvm}/Contents/Home
+    elif test $(uname) = "Linux"; then
+      export JAVA_HOME=${graalvm}
+    fi
   '';
 }
