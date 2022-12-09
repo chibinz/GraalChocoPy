@@ -23,7 +23,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         memory.put(id, val);
         System.out.println(memory);
 
-        return 0;
+        return NONE;
     }
 
     @Override
@@ -47,6 +47,30 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitIdExpr(ChocoPyParser.IdExprContext ctx) {
+        var id = ctx.IDENTIFIER().getText();
+        var val = memory.get(id);
+
+        if (val == null) {
+            throw new RuntimeException("Undefined variable: " + id);
+        }
+
+        return val;
+    }
+
+    @Override
+    public Object visitListExpr(ChocoPyParser.ListExprContext ctx) {
+        var len = ctx.expr().size();
+        var list = new Object[len];
+
+        for (int i = 0; i < len; i++) {
+            list[i] = visit(ctx.expr(i));
+        }
+
+        return list;
+    }
+
+    @Override
     public Object visitBinExpr(ChocoPyParser.BinExprContext ctx) {
         var left = Integer.class.cast(visit(ctx.pexpr(0)));
         var right = Integer.class.cast(visit(ctx.pexpr(1)));
@@ -63,18 +87,6 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitListExpr(ChocoPyParser.ListExprContext ctx) {
-        var len = ctx.expr().size();
-        var list = new Object[len];
-
-        for (int i = 0; i < len; i++) {
-            list[i] = visit(ctx.expr(i));
-        }
-
-        return list;
-    }
-
-    @Override
     public Object visitIndexExpr(ChocoPyParser.IndexExprContext ctx) {
         var list = Object[].class.cast(visit(ctx.pexpr()));
         var index = Integer.class.cast(visit(ctx.index_op().expr()));
@@ -86,12 +98,20 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitNegExpr(ChocoPyParser.NegExprContext ctx) {
+        var val = Integer.class.cast(visit(ctx.pexpr()));
+        return -val;
+    }
+
+    @Override
     public Object visitAssignStmt(ChocoPyParser.AssignStmtContext ctx) {
         var val = visit(ctx.expr());
 
         for (var id : ctx.target()) {
             memory.put(id.getText(), val);
         }
+
+        System.out.println(memory);
 
         return NONE;
     }
