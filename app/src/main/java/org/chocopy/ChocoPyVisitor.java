@@ -30,13 +30,12 @@ class LexicalScope {
 
 public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     private LexicalScope current_scope = new LexicalScope(null);
+    private Object retval = null;
     private final static Object NONE = new Object();
 
     @Override
     public Object visitProgram(ChocoPyParser.ProgramContext ctx) {
         visitChildren(ctx);
-
-        System.out.println(current_scope);
 
         return NONE;
     }
@@ -46,6 +45,18 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var id = ctx.func_sig().IDENTIFIER().getText();
 
         current_scope.put(id, ctx);
+
+        return NONE;
+    }
+
+    @Override
+    public Object visitFunc_body(ChocoPyParser.Func_bodyContext ctx) {
+        for (var c : ctx.children) {
+            visit(c);
+            if (retval != null) {
+                return retval;
+            }
+        }
 
         return NONE;
     }
@@ -61,7 +72,6 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var val = visit(ctx.literal());
 
         current_scope.put(id, val);
-        System.out.println(current_scope);
 
         return NONE;
     }
@@ -97,7 +107,8 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
     @Override
     public Object visitReturnStmt(ChocoPyParser.ReturnStmtContext ctx) {
-        return visit(ctx.expr());
+        retval = visit(ctx.expr());
+        return retval;
     }
 
     @Override
@@ -123,8 +134,6 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         for (var id : ctx.target()) {
             current_scope.put(id.getText(), val);
         }
-
-        System.out.println(current_scope);
 
         return NONE;
     }
@@ -226,8 +235,6 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var args = ctx.call_op().expr();
         var params = func.func_sig().typed_var();
 
-        System.out.println(func.func_sig().getText());
-
         if (args.size() != params.size()) {
             throw new RuntimeException("Wrong number of arguments");
         }
@@ -243,6 +250,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         // Function call
         current_scope = new_scope;
         var ret = visit(func.func_body());
+        retval = null;
         current_scope = new_scope.parent;
 
         return ret;
