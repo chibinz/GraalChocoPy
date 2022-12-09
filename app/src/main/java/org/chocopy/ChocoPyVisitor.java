@@ -105,11 +105,28 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
 
     @Override
     public Object visitWhileStmt(ChocoPyParser.WhileStmtContext ctx) {
+        var cond = Boolean.class.cast(visit(ctx.expr()));
+        while (cond) {
+            visit(ctx.block());
+            cond = Boolean.class.cast(visit(ctx.expr()));
+        }
+
         return NONE;
     }
 
     @Override
     public Object visitForStmt(ChocoPyParser.ForStmtContext ctx) {
+        var arr = Object[].class.cast(visit(ctx.expr()));
+        if (arr == null) {
+            throw new RuntimeException("Cannot iterate over non-list");
+        }
+        var id = ctx.IDENTIFIER().getText();
+
+        for (var val : arr) {
+            memory.put(id, val);
+            visit(ctx.block());
+        }
+
         return NONE;
     }
 }
