@@ -2,15 +2,41 @@ package org.chocopy;
 
 import java.util.HashMap;
 
+class LexicalScope {
+    private final HashMap<String, Object> memory = new HashMap<String, Object>();
+    public final LexicalScope parent;
+
+    public LexicalScope(LexicalScope parent) {
+        this.parent = parent;
+    }
+
+    public Object get(String id) {
+        var val = memory.get(id);
+        if (val == null && parent != null) {
+            return parent.get(id);
+        }
+        return val;
+    }
+
+    public void put(String id, Object val) {
+        memory.put(id, val);
+    }
+
+    @Override
+    public String toString() {
+        return memory.toString();
+    }
+}
+
 public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
-    private HashMap<String, Object> memory = new HashMap<String, Object>();
+    private LexicalScope current_scope = new LexicalScope(null);
     private final static Object NONE = new Object();
 
     @Override
     public Object visitProgram(ChocoPyParser.ProgramContext ctx) {
         visitChildren(ctx);
 
-        System.out.println(memory);
+        System.out.println(current_scope);
 
         return NONE;
     }
@@ -19,7 +45,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     public Object visitFunc_def(ChocoPyParser.Func_defContext ctx) {
         var id = ctx.func_sig().IDENTIFIER().getText();
 
-        memory.put(id, ctx);
+        current_scope.put(id, ctx);
 
         return NONE;
     }
@@ -34,8 +60,8 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var id = visitTyped_var(ctx.typed_var());
         var val = visit(ctx.literal());
 
-        memory.put(id, val);
-        System.out.println(memory);
+        current_scope.put(id, val);
+        System.out.println(current_scope);
 
         return NONE;
     }
@@ -70,6 +96,11 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitReturnStmt(ChocoPyParser.ReturnStmtContext ctx) {
+        return visit(ctx.expr());
+    }
+
+    @Override
     public Object visitForStmt(ChocoPyParser.ForStmtContext ctx) {
         var arr = Object[].class.cast(visit(ctx.expr()));
         if (arr == null) {
@@ -78,7 +109,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var id = ctx.IDENTIFIER().getText();
 
         for (var val : arr) {
-            memory.put(id, val);
+            current_scope.put(id, val);
             visit(ctx.block());
         }
 
@@ -90,10 +121,10 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         var val = visit(ctx.expr());
 
         for (var id : ctx.target()) {
-            memory.put(id.getText(), val);
+            current_scope.put(id.getText(), val);
         }
 
-        System.out.println(memory);
+        System.out.println(current_scope);
 
         return NONE;
     }
@@ -116,7 +147,7 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     @Override
     public Object visitIdExpr(ChocoPyParser.IdExprContext ctx) {
         var id = ctx.IDENTIFIER().getText();
-        var val = memory.get(id);
+        var val = current_scope.get(id);
 
         if (id.equals("print")) {
             return NONE;
@@ -174,14 +205,20 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
             throw new RuntimeException("Wrong number of arguments");
         }
 
+        var new_scope = new LexicalScope(current_scope);
         for (var i = 0; i < args.size(); i++) {
             var arg = visit(args.get(i));
             var param = visitTyped_var(params.get(i));
 
-            memory.put(param, arg);
+            new_scope.put(param, arg);
         }
 
-        return visit(func.func_body());
+        // Function call
+        current_scope = new_scope;
+        var ret = visit(func.func_body());
+        current_scope = new_scope.parent;
+
+        return ret;
     }
 
     @Override
