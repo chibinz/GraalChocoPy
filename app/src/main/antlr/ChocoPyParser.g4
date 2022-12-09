@@ -3,7 +3,7 @@ parser grammar ChocoPyParser;
 options { tokenVocab=ChocoPyLexer; }
 
 program
-    : (var_def | func_def /* | class_def */ )* stmt*
+    : LINE_BREAK* (var_def | func_def /* | class_def */ )* stmt*
     ;
 
 // class_def
