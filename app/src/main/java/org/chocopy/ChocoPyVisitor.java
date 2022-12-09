@@ -16,6 +16,15 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitFunc_def(ChocoPyParser.Func_defContext ctx) {
+        var id = ctx.func_sig().IDENTIFIER().getText();
+
+        memory.put(id, ctx);
+
+        return NONE;
+    }
+
+    @Override
     public String visitTyped_var(ChocoPyParser.Typed_varContext ctx) {
         return ctx.IDENTIFIER().getText();
     }
@@ -98,8 +107,8 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
             case ChocoPyParser.TRUE -> true;
             case ChocoPyParser.FALSE -> false;
             case ChocoPyParser.INTEGER -> Integer.parseInt(ctx.getText());
-            case ChocoPyParser.IDSTRING -> ctx.getText();
-            case ChocoPyParser.STRING -> ctx.getText();
+            case ChocoPyParser.IDSTRING -> ctx.getText().replace("\"", "");
+            case ChocoPyParser.STRING -> ctx.getText().replace("\"", "");
             default -> throw new RuntimeException("Unknown literal type");
         };
     }
@@ -108,6 +117,10 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     public Object visitIdExpr(ChocoPyParser.IdExprContext ctx) {
         var id = ctx.IDENTIFIER().getText();
         var val = memory.get(id);
+
+        if (id.equals("print")) {
+            return NONE;
+        }
 
         if (val == null) {
             throw new RuntimeException("Undefined variable: " + id);
@@ -137,6 +150,38 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
         assert index != null;
 
         return list[index];
+    }
+
+    @Override
+    public Object visitCallExpr(ChocoPyParser.CallExprContext ctx) {
+        if (ctx.pexpr().getText().equals("print")) {
+            var args = ctx.call_op().expr();
+            for (var arg : args) {
+                System.out.print(visit(arg));
+                System.out.print(" ");
+            }
+            System.out.println();
+            return NONE;
+        }
+
+        var func = ChocoPyParser.Func_defContext.class.cast(visit(ctx.pexpr()));
+        var args = ctx.call_op().expr();
+        var params = func.func_sig().typed_var();
+
+        System.out.println(func.func_sig().getText());
+
+        if (args.size() != params.size()) {
+            throw new RuntimeException("Wrong number of arguments");
+        }
+
+        for (var i = 0; i < args.size(); i++) {
+            var arg = visit(args.get(i));
+            var param = visitTyped_var(params.get(i));
+
+            memory.put(param, arg);
+        }
+
+        return visit(func.func_body());
     }
 
     @Override
