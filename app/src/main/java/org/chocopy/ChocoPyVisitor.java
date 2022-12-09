@@ -75,6 +75,17 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitIndexExpr(ChocoPyParser.IndexExprContext ctx) {
+        var list = Object[].class.cast(visit(ctx.pexpr()));
+        var index = Integer.class.cast(visit(ctx.index_op().expr()));
+
+        assert list != null;
+        assert index != null;
+
+        return list[index];
+    }
+
+    @Override
     public Object visitAssignStmt(ChocoPyParser.AssignStmtContext ctx) {
         var val = visit(ctx.expr());
 
