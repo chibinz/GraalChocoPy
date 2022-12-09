@@ -130,6 +130,33 @@ public class ChocoPyVisitor extends ChocoPyParserBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitCexpr(ChocoPyParser.CexprContext ctx) {
+        if (ctx.comp_op().size() == 0) {
+            return visit(ctx.pexpr(0));
+        }
+        if (ctx.comp_op().size() > 1) {
+            throw new RuntimeException("Cannot compare more than two expressions");
+        }
+
+        var left = visit(ctx.pexpr(0));
+        var right = visit(ctx.pexpr(1));
+
+        if (left == null || right == null) {
+            throw new RuntimeException("Cannot compare null");
+        }
+        var rule = ctx.comp_op(0).op.getType();
+
+        return switch (rule) {
+            case ChocoPyParser.EQUALS -> left.equals(right);
+            case ChocoPyParser.BANG_EQUAL -> !left.equals(right);
+            case ChocoPyParser.LESS_THAN -> Integer.class.cast(left) < Integer.class.cast(right);
+            case ChocoPyParser.LESS_THAN_EQUAL -> Integer.class.cast(left) <= Integer.class.cast(right);
+            case ChocoPyParser.GREATER_THAN -> Integer.class.cast(left) > Integer.class.cast(right);
+            case ChocoPyParser.GREATER_THAN_EQUAL -> Integer.class.cast(left) >= Integer.class.cast(right);
+            default -> throw new RuntimeException("Unknown comparison operator");
+        };
+    }
+    @Override
     public Object visitLiteral(ChocoPyParser.LiteralContext ctx) {
         var rule = ctx.lit.getType();
 

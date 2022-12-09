@@ -120,5 +120,11 @@ bin_op
     ;
 
 comp_op
-    : EQUALS | BANG_EQUAL | LESS_THAN_EQUAL | GREATER_THAN_EQUAL | LESS_THAN | GREATER_THAN // | IS
+    : op = EQUALS
+    | op = BANG_EQUAL
+    | op = LESS_THAN_EQUAL
+    | op = GREATER_THAN_EQUAL
+    | op = LESS_THAN
+    | op = GREATER_THAN
+//     | IS
     ;
