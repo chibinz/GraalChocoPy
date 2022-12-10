@@ -8,8 +8,6 @@ import java.util.List;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-import com.oracle.truffle.api.TruffleLanguage;
-
 public class App {
     public static void main(String[] args) throws IOException {
         var parseTree = parseFile(args[0]);
@@ -54,21 +52,5 @@ public class App {
                 }
             }
         }
-    }
-}
-
-class ChocoPyContext {
-    public ChocoPyContext(TruffleLanguage.Env env) {
-    }
-}
-
-class ChocoPyLanguage extends TruffleLanguage<ChocoPyContext> {
-    public ChocoPyLanguage() {
-        System.out.println("Hello World!");
-    }
-
-    @Override
-    public ChocoPyContext createContext(TruffleLanguage.Env env) {
-        return new ChocoPyContext(env);
     }
 }
