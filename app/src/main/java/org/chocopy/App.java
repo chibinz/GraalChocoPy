@@ -1,6 +1,5 @@
 package org.chocopy;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -9,34 +8,43 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 public class App {
-    public static void main(String[] args) throws IOException {
-        var parseTree = parseFile(args[0]);
-        var visitor = new ChocoPySimpleVisitor();
-
-        // printParseTree(parseTree);
-        visitor.visit(parseTree);
+    public static void main(String[] args) {
+        runSimpleVisitor(args[0]);
     }
 
     public String getGreeting() {
         return "Hello World!";
     }
 
-    private static ParseTree parseFile(String arg) throws IOException {
-        var lexer = new ChocoPyLexer(CharStreams.fromPath(Path.of(arg)));
-        var parser = new ChocoPyParser(
-                new CommonTokenStream(lexer));
+    public static void runSimpleVisitor(String path) {
+        var parseTree = parseFile(path);
+        var visitor = new ChocoPySimpleVisitor();
 
-        parser.setBuildParseTree(true);
-        return parser.program();
+        visitor.visit(parseTree);
     }
 
-    private static void printParseTree(ParseTree tree) {
+    public static void printParseTree(ParseTree tree) {
         var parser = new ChocoPyParser(null);
         var buf = new StringBuilder();
 
         recursive(tree, buf, 0, Arrays.asList(parser.getRuleNames()));
 
         System.out.println(buf);
+    }
+
+    private static ParseTree parseFile(String path) {
+        try {
+            var lexer = new ChocoPyLexer(CharStreams.fromPath(Path.of(path)));
+            var parser = new ChocoPyParser(
+                    new CommonTokenStream(lexer));
+
+            parser.setBuildParseTree(true);
+            return parser.program();
+        } catch (Exception e) {
+            System.out.println(e);
+            System.exit(1);
+            return null;
+        }
     }
 
     private static void recursive(ParseTree aRoot, StringBuilder buf, int offset, List<String> ruleNames) {
