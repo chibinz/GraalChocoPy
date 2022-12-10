@@ -2,6 +2,14 @@ package org.chocopy;
 
 import java.util.HashMap;
 
+class ChocoPyReturnException extends RuntimeException {
+    public final Object value;
+
+    public ChocoPyReturnException(Object value) {
+        this.value = value;
+    }
+}
+
 class LexicalScope {
     private final HashMap<String, Object> memory = new HashMap<String, Object>();
     public final LexicalScope parent;
@@ -30,7 +38,6 @@ class LexicalScope {
 
 public class ChocoPySimpleVisitor extends ChocoPyParserBaseVisitor<Object> {
     private LexicalScope current_scope = new LexicalScope(null);
-    private Object retval = null;
     private final static Object NONE = new Object();
 
     @Override
@@ -52,9 +59,10 @@ public class ChocoPySimpleVisitor extends ChocoPyParserBaseVisitor<Object> {
     @Override
     public Object visitFunc_body(ChocoPyParser.Func_bodyContext ctx) {
         for (var c : ctx.children) {
-            visit(c);
-            if (retval != null) {
-                return retval;
+            try {
+                visit(c);
+            } catch (ChocoPyReturnException e) {
+                return e.value;
             }
         }
 
@@ -105,10 +113,13 @@ public class ChocoPySimpleVisitor extends ChocoPyParserBaseVisitor<Object> {
         return NONE;
     }
 
+    /*
+     * Use the exception trick from SimpleLanguage to skip later statements
+     * when a return statement is encountered.
+     */
     @Override
     public Object visitReturnStmt(ChocoPyParser.ReturnStmtContext ctx) {
-        retval = visit(ctx.expr());
-        return retval;
+        throw new ChocoPyReturnException(visit(ctx.expr()));
     }
 
     @Override
@@ -165,6 +176,7 @@ public class ChocoPySimpleVisitor extends ChocoPyParserBaseVisitor<Object> {
             default -> throw new RuntimeException("Unknown comparison operator");
         };
     }
+
     @Override
     public Object visitLiteral(ChocoPyParser.LiteralContext ctx) {
         var rule = ctx.lit.getType();
@@ -250,7 +262,6 @@ public class ChocoPySimpleVisitor extends ChocoPyParserBaseVisitor<Object> {
         // Function call
         current_scope = new_scope;
         var ret = visit(func.func_body());
-        retval = null;
         current_scope = new_scope.parent;
 
         return ret;

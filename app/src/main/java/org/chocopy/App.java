@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.tree.*;
 public class App {
     public static void main(String[] args) throws IOException {
         var parseTree = parseFile(args[0]);
-        var visitor = new ChocoPyVisitor();
+        var visitor = new ChocoPySimpleVisitor();
 
         // printParseTree(parseTree);
         visitor.visit(parseTree);
