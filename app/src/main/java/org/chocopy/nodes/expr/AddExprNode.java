@@ -12,8 +12,9 @@ public abstract class AddExprNode extends BaseExprNode {
         return left + right;
     }
 
-    @Fallback
-    public Object typeError(Object left, Object right) {
-        throw new RuntimeException("Cannot add " + left + " and " + right);
+    @Specialization
+    public String add(String left, String right) {
+        return left + right;
     }
+
 }
