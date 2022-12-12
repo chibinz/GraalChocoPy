@@ -6,14 +6,9 @@ program
     : LINE_BREAK* (var_def | func_def /* | class_def */ )* stmt*
     ;
 
-// class_def
-//     : CLASS IDENTIFIER OPEN_PAREN IDENTIFIER CLOSE_PAREN COLON LINE_BREAK INDENT class_body DEDENT
-//     ;
-
-// class_body
-//     : PASS LINE_BREAK
-//     | (var_def | func_def)+
-//     ;
+var_def
+    : typed_var ASSIGN literal LINE_BREAK
+    ;
 
 func_def
     : DEF func_sig COLON LINE_BREAK INDENT func_body DEDENT
@@ -26,6 +21,15 @@ func_sig
 func_body
     : ( /* global_decl | nonlocal_decl | */ var_def | func_def)* stmt+
     ;
+
+// class_def
+//     : CLASS IDENTIFIER OPEN_PAREN IDENTIFIER CLOSE_PAREN COLON LINE_BREAKINDENT class_body DEDENT
+//     ;
+
+// class_body
+//     : PASS LINE_BREAK
+//     | (var_def | func_def)+
+//     ;
 
 typed_var
     : IDENTIFIER COLON type
@@ -43,22 +47,20 @@ type
 //     : NONLOCAL IDENTIFIER LINE_BREAK
 //     ;
 
-var_def
-    : typed_var ASSIGN literal LINE_BREAK
-    ;
-
 stmt
-    : simple_stmt LINE_BREAK                                           # simpleStmt
-    | IF expr COLON block (ELIF expr COLON block)* (ELSE COLON block)? # ifStmt
-    | WHILE expr COLON block                                           # whileStmt
-    | FOR IDENTIFIER IN expr COLON block                               # forStmt
+    : simple_stmt LINE_BREAK                            # simpleStmt
+    | IF expr COLON block
+        (ELIF expr COLON block)*
+        (ELSE COLON block)?                             # ifStmt
+    | WHILE expr COLON block                            # whileStmt
+    | FOR IDENTIFIER IN expr COLON block                # forStmt
     ;
 
 simple_stmt
-    : PASS                                  # passStmt
-    | expr                                  # exprStmt
-    | RETURN (expr)? ?                      # returnStmt
-    | (target ASSIGN)+ expr                 # assignStmt
+    : PASS                                              # passStmt
+    | expr                                              # exprStmt
+    | RETURN (expr)? ?                                  # returnStmt
+    | (target ASSIGN)+ expr                             # assignStmt
     ;
 
 block
@@ -75,10 +77,11 @@ literal
     ;
 
 expr
-    : cexpr
-    | NOT expr
-    | expr (AND | OR) expr
-    | expr IF expr ELSE expr
+    : cexpr                                             # compExpr
+    | NOT expr                                          # notExpr
+    | expr AND expr                                     # andExpr
+    | expr OR expr                                      # orExpr
+    | expr IF expr ELSE expr                            # ifElseExpr
     ;
 
 cexpr
