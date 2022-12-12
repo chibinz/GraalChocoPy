@@ -1,14 +1,14 @@
-package org.chocopy.nodes;
+package org.chocopy.nodes.expr;
 
-import org.chocopy.nodes.expr.*;
+import org.chocopy.nodes.ChocoPyRootNode;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ExecuteNodeTest {
+public class AddExprNodeTest {
     @Test
-    public void add2Int() {
+    public void addInt() {
         var prog = new ChocoPyRootNode(AddExprNodeGen.create(
             new IntLitNode(1),
             new IntLitNode(2)
@@ -21,7 +21,7 @@ public class ExecuteNodeTest {
     }
 
     @Test
-    public void add2Bool() {
+    public void addBool() {
         assertThrows(Exception.class, () -> {
             var prog = new ChocoPyRootNode(AddExprNodeGen.create(
                 new BoolLitNode(true),
@@ -33,7 +33,7 @@ public class ExecuteNodeTest {
     }
 
     @Test
-    public void concat2Str() {
+    public void concatStr() {
         var prog = new ChocoPyRootNode(AddExprNodeGen.create(
             new StrLitNode("Hello"),
             new StrLitNode("World")
