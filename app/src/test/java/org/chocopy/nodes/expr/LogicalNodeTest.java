@@ -3,12 +3,12 @@ package org.chocopy.nodes.expr;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LogicalExprNodeTest {
+public class LogicalNodeTest {
     @Test
     public void logicalAnd() {
-        var prog = LogicalExprNodeGen.create(
-            new BoolLitNode(true),
-            new BoolLitNode(false),
+        var prog = LogicalNodeGen.create(
+            new BoolNode(true),
+            new BoolNode(false),
             "and"
         );
 

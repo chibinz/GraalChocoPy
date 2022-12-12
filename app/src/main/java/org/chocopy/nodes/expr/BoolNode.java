@@ -1,17 +1,16 @@
 package org.chocopy.nodes.expr;
 
-
 import com.oracle.truffle.api.frame.VirtualFrame;
 
-public class IntLitNode extends BaseExprNode {
-    private final int value;
+public class BoolNode extends BaseExprNode {
+    private final boolean value;
 
-    public IntLitNode(int value) {
+    public BoolNode(boolean value) {
         this.value = value;
     }
 
     @Override
-    public int executeInt(VirtualFrame frame) {
+    public boolean executeBool(VirtualFrame frame) {
         return value;
     }
 

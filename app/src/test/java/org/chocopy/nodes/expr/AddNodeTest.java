@@ -3,12 +3,12 @@ package org.chocopy.nodes.expr;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddExprNodeTest {
+public class AddNodeTest {
     @Test
     public void addInt() {
-        var prog = AddExprNodeGen.create(
-            new IntLitNode(1),
-            new IntLitNode(2)
+        var prog = AddNodeGen.create(
+            new IntNode(1),
+            new IntNode(2)
         );
 
 
@@ -18,9 +18,9 @@ public class AddExprNodeTest {
     @Test
     public void addBool() {
         assertThrows(Exception.class, () -> {
-            var prog = AddExprNodeGen.create(
-                new BoolLitNode(true),
-                new BoolLitNode(false)
+            var prog = AddNodeGen.create(
+                new BoolNode(true),
+                new BoolNode(false)
             );
 
             prog.executeGeneric(null);
@@ -29,9 +29,9 @@ public class AddExprNodeTest {
 
     @Test
     public void concatStr() {
-        var prog = AddExprNodeGen.create(
-            new StrLitNode("Hello"),
-            new StrLitNode("World")
+        var prog = AddNodeGen.create(
+            new StrNode("Hello"),
+            new StrNode("World")
         );
 
         assertEquals("HelloWorld", prog.executeGeneric(null));

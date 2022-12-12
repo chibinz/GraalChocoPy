@@ -3,12 +3,12 @@ package org.chocopy.nodes.expr;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompExprNodeTest {
+public class CompNodeTest {
     @Test
     public void compEqual() {
-        var prog = CompExprNodeGen.create(
-            new IntLitNode(1),
-            new IntLitNode(1),
+        var prog = CompNodeGen.create(
+            new IntNode(1),
+            new IntNode(1),
             "=="
         );
 
@@ -16,9 +16,9 @@ public class CompExprNodeTest {
     }
 
     @Test void compLessThan() {
-        var prog = CompExprNodeGen.create(
-            new IntLitNode(1),
-            new IntLitNode(2),
+        var prog = CompNodeGen.create(
+            new IntNode(1),
+            new IntNode(2),
             "<"
         );
 

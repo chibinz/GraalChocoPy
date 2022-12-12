@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class NegNodeTest {
     @Test
     public void negInt() {
-        var prog = NegNodeGen.create(new IntLitNode(1));
+        var prog = NegNodeGen.create(new IntNode(1));
 
         assertEquals(-1, prog.executeGeneric(null));
     }
