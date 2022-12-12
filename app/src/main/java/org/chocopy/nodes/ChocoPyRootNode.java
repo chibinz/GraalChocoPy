@@ -7,9 +7,9 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 
 public class ChocoPyRootNode extends RootNode {
     @Child
-    private AddExprNode body;
+    private BinaryExprNode body;
 
-    public ChocoPyRootNode(AddExprNode body) {
+    public ChocoPyRootNode(BinaryExprNode body) {
         super(null);
         this.body = body;
     }

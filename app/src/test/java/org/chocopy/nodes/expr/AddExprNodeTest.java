@@ -3,8 +3,7 @@ package org.chocopy.nodes.expr;
 import org.chocopy.nodes.ChocoPyRootNode;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AddExprNodeTest {
     @Test
