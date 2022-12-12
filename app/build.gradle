@@ -21,13 +21,9 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.0.1-jre'
-
     // Truffle
     implementation 'org.graalvm.truffle:truffle-api:22.3.0'
-    implementation 'org.graalvm.truffle:truffle-dsl-processor:22.3.0'
-    implementation 'org.graalvm.truffle:truffle-tck:22.3.0'
+    annotationProcessor 'org.graalvm.truffle:truffle-dsl-processor:22.3.0'
 
     // ANTLR
     antlr 'org.antlr:antlr4:4.9.2'
