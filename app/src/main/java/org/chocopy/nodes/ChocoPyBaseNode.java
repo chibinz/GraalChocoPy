@@ -1,8 +1,0 @@
-package org.chocopy.nodes;
-
-import com.oracle.truffle.api.nodes.*;
-import com.oracle.truffle.api.frame.VirtualFrame;
-
-public abstract class ChocoPyBaseNode extends Node {
-    public abstract Object executeGeneric(VirtualFrame frame);
-}
