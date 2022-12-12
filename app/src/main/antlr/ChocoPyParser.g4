@@ -56,6 +56,10 @@ stmt
     | FOR IDENTIFIER IN expr COLON block                # forStmt
     ;
 
+block
+    : LINE_BREAK INDENT stmt+ DEDENT
+    ;
+
 simple_stmt
     : PASS                                              # passStmt
     | expr                                              # exprStmt
@@ -63,17 +67,10 @@ simple_stmt
     | (target ASSIGN)+ expr                             # assignStmt
     ;
 
-block
-    : LINE_BREAK INDENT stmt+ DEDENT
-    ;
-
-literal
-    : lit = NONE
-    | lit = TRUE
-    | lit = FALSE
-    | lit = INTEGER
-    | lit = IDSTRING
-    | lit = STRING
+target
+    : IDENTIFIER
+    | pexpr member_op
+    | pexpr index_op
     ;
 
 expr
@@ -100,10 +97,13 @@ pexpr
     | MINUS pexpr                                       # negExpr
     ;
 
-target
-    : IDENTIFIER
-    | pexpr member_op
-    | pexpr index_op
+literal
+    : lit = NONE
+    | lit = TRUE
+    | lit = FALSE
+    | lit = INTEGER
+    | lit = IDSTRING
+    | lit = STRING
     ;
 
 member_op
