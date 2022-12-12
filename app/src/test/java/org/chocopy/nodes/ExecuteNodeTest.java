@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.oracle.truffle.api.nodes.UnexpectedResultException;
-
 public class ExecuteNodeTest {
     @Test
     public void add2Int() {
