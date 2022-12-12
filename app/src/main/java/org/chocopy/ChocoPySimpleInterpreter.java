@@ -36,7 +36,7 @@ class LexicalScope {
     }
 }
 
-public class ChocoPySimpleVisitor extends ChocoPyParserBaseVisitor<Object> {
+public class ChocoPySimpleInterpreter extends ChocoPyParserBaseVisitor<Object> {
     private LexicalScope current_scope = new LexicalScope(null);
     private final static Object NONE = new Object();
 

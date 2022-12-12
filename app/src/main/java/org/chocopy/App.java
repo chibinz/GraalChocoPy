@@ -9,16 +9,16 @@ import org.antlr.v4.runtime.tree.*;
 
 public class App {
     public static void main(String[] args) {
-        runSimpleVisitor(args[0]);
+        runSimpleInterpreter(args[0]);
     }
 
     public String getGreeting() {
         return "Hello World!";
     }
 
-    public static void runSimpleVisitor(String path) {
+    public static void runSimpleInterpreter(String path) {
         var parseTree = parseFile(path);
-        var visitor = new ChocoPySimpleVisitor();
+        var visitor = new ChocoPySimpleInterpreter();
 
         visitor.visit(parseTree);
     }

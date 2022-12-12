@@ -8,6 +8,6 @@ import org.junit.jupiter.api.Test;
 class AppTest {
     @Test
     void testHello() {
-        App.runSimpleVisitor("src/test/python/hello.py");
+        App.runSimpleInterpreter("src/test/python/hello.py");
     }
 }
