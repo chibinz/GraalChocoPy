@@ -1,25 +1,42 @@
 package org.chocopy.nodes.stmt;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.FrameSlotKind;
 
+import org.chocopy.nodes.ChocoPyRootNode;
+import org.chocopy.nodes.expr.IntNode;
+
 public class AssignNodeTest {
     @Test
-    public void test() {
+    public void testValidFrame() {
         var builder = FrameDescriptor.newBuilder();
-        var slot1 = builder.addSlot(FrameSlotKind.Illegal, null, null);
-        var slot2 = builder.addSlot(FrameSlotKind.Illegal, null, null);
+        var s1 = builder.addSlot(FrameSlotKind.Illegal, null, null);
+        var s2 = builder.addSlot(FrameSlotKind.Illegal, null, null);
 
-        /* var frameDescriptor = */ builder.build();
+        var root = new ChocoPyRootNode(
+                new BlockNode(new BaseStmtNode[] {
+                        AssignNodeGen.create(new IntNode(0), s1),
+                        AssignNodeGen.create(new IntNode(1), s2),
+                        AssignNodeGen.create(new IntNode(2), s1),
+                }),
+                builder.build());
 
-        var builder2 = FrameDescriptor.newBuilder();
-        var slot3 = builder2.addSlot(FrameSlotKind.Illegal, null, null);
+        root.getCallTarget().call();
+    }
 
-        System.out.println(slot1);
-        System.out.println(slot2);
-        System.out.println(slot3);
+    @Test
+    public void testEmptyFrame() {
+        var root = new ChocoPyRootNode(
+                new BlockNode(new BaseStmtNode[] {
+                        AssignNodeGen.create(new IntNode(0), 0),
+                }),
+                null);
 
-        /* "0, 1, 0" */
+        assertThrows(Exception.class, () -> {
+            root.getCallTarget().call();
+        });
     }
 }
