@@ -11,7 +11,6 @@ public class AddNodeTest {
             new IntNode(2)
         );
 
-
         assertEquals(3, prog.executeGeneric(null));
     }
 

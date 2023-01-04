@@ -11,12 +11,15 @@ public class AssignNodeTest {
         var slot1 = builder.addSlot(FrameSlotKind.Illegal, null, null);
         var slot2 = builder.addSlot(FrameSlotKind.Illegal, null, null);
 
+        /* var frameDescriptor = */ builder.build();
+
         var builder2 = FrameDescriptor.newBuilder();
         var slot3 = builder2.addSlot(FrameSlotKind.Illegal, null, null);
+
         System.out.println(slot1);
         System.out.println(slot2);
         System.out.println(slot3);
 
-        var node = new AssignNode(0, null, null);
+        /* "0, 1, 0" */
     }
 }
