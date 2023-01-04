@@ -8,6 +8,7 @@ import com.oracle.truffle.api.frame.FrameSlotKind;
 
 import org.chocopy.nodes.ChocoPyRootNode;
 import org.chocopy.nodes.expr.IntNode;
+import org.chocopy.nodes.builtin.*;
 
 public class AssignNodeTest {
     @Test
@@ -21,6 +22,7 @@ public class AssignNodeTest {
                         AssignNodeGen.create(new IntNode(0), s1),
                         AssignNodeGen.create(new IntNode(1), s2),
                         AssignNodeGen.create(new IntNode(2), s1),
+                        new PrintFrameNode(),
                 }),
                 builder.build());
 
