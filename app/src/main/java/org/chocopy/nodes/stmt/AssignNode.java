@@ -8,13 +8,11 @@ import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.frame.FrameSlotKind;
 
-@NodeChild(value="valueNode", type=BaseExprNode.class)
-@NodeField(name="slot", type=int.class)
+@NodeChild(value = "valueNode", type = BaseExprNode.class)
+@NodeField(name = "slot", type = int.class)
 public abstract class AssignNode extends BaseStmtNode {
     public abstract BaseExprNode getValueNode();
     public abstract int getSlot();
-    public abstract void executeVoid(VirtualFrame frame);
-
 
     @Specialization
     public void assignBool(VirtualFrame frame, boolean value) {
