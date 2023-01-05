@@ -1,6 +1,7 @@
 package org.chocopy.nodes.stmt;
 
 import org.chocopy.nodes.expr.*;
+import org.chocopy.nodes.literal.*;
 import org.chocopy.nodes.ChocoPyRootNode;
 import org.chocopy.nodes.builtin.PrintNode;
 

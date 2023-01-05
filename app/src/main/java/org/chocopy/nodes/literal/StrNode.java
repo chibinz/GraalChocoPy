@@ -1,4 +1,6 @@
-package org.chocopy.nodes.expr;
+package org.chocopy.nodes.literal;
+
+import org.chocopy.nodes.expr.BaseExprNode;
 
 import com.oracle.truffle.api.frame.VirtualFrame;
 

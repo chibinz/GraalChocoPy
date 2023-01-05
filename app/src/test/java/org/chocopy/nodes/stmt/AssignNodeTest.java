@@ -7,8 +7,8 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.FrameSlotKind;
 
 import org.chocopy.nodes.ChocoPyRootNode;
-import org.chocopy.nodes.expr.IntNode;
 import org.chocopy.nodes.builtin.*;
+import org.chocopy.nodes.literal.IntNode;
 
 public class AssignNodeTest {
     @Test
