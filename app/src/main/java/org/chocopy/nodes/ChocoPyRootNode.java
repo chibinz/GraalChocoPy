@@ -1,5 +1,6 @@
 package org.chocopy.nodes;
 
+import org.chocopy.ChocoPyLanguage;
 import org.chocopy.nodes.stmt.BaseStmtNode;
 
 import com.oracle.truffle.api.nodes.RootNode;
@@ -10,8 +11,8 @@ public class ChocoPyRootNode extends RootNode {
     @Child
     private BaseStmtNode body;
 
-    public ChocoPyRootNode(BaseStmtNode body, FrameDescriptor frameDescriptor) {
-        super(null, frameDescriptor);
+    public ChocoPyRootNode(ChocoPyLanguage language, BaseStmtNode body, FrameDescriptor frameDescriptor) {
+        super(language, frameDescriptor);
         this.body = body;
     }
 

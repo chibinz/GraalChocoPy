@@ -1,5 +1,6 @@
 package org.chocopy.nodes.func;
 
+import org.chocopy.ChocoPyLanguage;
 import org.chocopy.nodes.stmt.BlockNode;
 
 import com.oracle.truffle.api.frame.FrameDescriptor;
@@ -9,7 +10,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 public class FuncBodyNode extends RootNode {
     @Child private BlockNode body;
 
-    public FuncBodyNode(BlockNode body, FrameDescriptor frameDescriptor) {
+    public FuncBodyNode(ChocoPyLanguage language, BlockNode body, FrameDescriptor frameDescriptor) {
         super(null, frameDescriptor);
         this.body = body;
     }

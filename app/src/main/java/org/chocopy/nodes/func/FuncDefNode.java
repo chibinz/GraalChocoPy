@@ -1,6 +1,7 @@
 package org.chocopy.nodes.func;
 
 import org.chocopy.ChocoPyContext;
+import org.chocopy.ChocoPyLanguage;
 import org.chocopy.nodes.stmt.BaseStmtNode;
 import org.chocopy.nodes.stmt.BlockNode;
 
@@ -21,8 +22,10 @@ public class FuncDefNode extends BaseStmtNode {
 
     @Override
     public void executeVoid(VirtualFrame frame) {
-        var funcBodyNode = new FuncBodyNode(body, frameDescriptor);
+        var language = ChocoPyLanguage.get(this);
         var context = ChocoPyContext.get(this);
+
+        var funcBodyNode = new FuncBodyNode(language, body, frameDescriptor);
 
         context.globalScope.put(name, funcBodyNode.getCallTarget());
     }

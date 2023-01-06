@@ -1,5 +1,6 @@
 package org.chocopy;
 
+import com.oracle.truffle.api.nodes.Node;
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.TruffleLanguage;
 
@@ -14,8 +15,15 @@ public class ChocoPyLanguage extends TruffleLanguage<ChocoPyContext> {
     public static final String NAME = "ChocoPy";
     public static final String MIME_TYPE = "application/x-chocopy";
 
+    private static final LanguageReference<ChocoPyLanguage> REF =
+        LanguageReference.create(ChocoPyLanguage.class);
+
     public ChocoPyLanguage() {
         System.out.println("Hello World!");
+    }
+
+    public static ChocoPyLanguage get(Node node) {
+        return REF.get(node);
     }
 
     @Override
