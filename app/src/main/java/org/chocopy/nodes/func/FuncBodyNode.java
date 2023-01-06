@@ -16,7 +16,11 @@ public class FuncBodyNode extends RootNode {
 
     @Override
     public Object execute(VirtualFrame frame) {
-        body.executeVoid(frame);
+        try {
+            body.executeVoid(frame);
+        } catch (ReturnException e) {
+            return e.value;
+        }
 
         return null;
     }
